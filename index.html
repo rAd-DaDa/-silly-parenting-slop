@@ -42,6 +42,7 @@ let asks=2;const $=s=>document.querySelector(s);const sample=[
 ];
 function show(id){['#askBox','#loading','#answers','#respond'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 $('#ask').onclick=()=>{if(!$('#question').value.trim()){$('#question').focus();return}if(asks<1){alert('You are out of asks. Be the parent and earn one.');return}asks--;$('#asks').textContent=asks;show('#loading');setTimeout(()=>{$('#answerList').innerHTML=sample.map(([w,t])=>`<article class="answer"><div class="who">${w}</div><p>${t}</p><div class="row react"><button>THIS HELPED</button><button>LOL SAME</button><button>ABSOLUTELY NOT</button></div></article>`).join('');show('#answers')},1150)};
-$('#beParent').onclick=()=>show('#respond');$('#cancel').onclick=()=>show('#askBox');$('#again').onclick=()=>show('#askBox');
-$('#submitReply').onclick=()=>{if(!$('#reply').value.trim()){$('#reply').focus();return}asks++;$('#asks').textContent=asks;$('#reply').value='';alert('Wisdom delivered. You earned another ask. Terrifying.');show('#askBox')};
+function returnToAsk(){ $('#question').value=''; show('#askBox') }
+$('#beParent').onclick=()=>show('#respond');$('#cancel').onclick=returnToAsk;$('#again').onclick=returnToAsk;
+$('#submitReply').onclick=()=>{if(!$('#reply').value.trim()){$('#reply').focus();return}asks++;$('#asks').textContent=asks;$('#reply').value='';alert('Wisdom delivered. You earned another ask. Terrifying.');returnToAsk()};
 </script></body></html>
