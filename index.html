@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Silly Parenting Slop</title>
+  <style>
+    :root{--ink:#171717;--paper:#fffdf5;--acid:#e8ff45;--pink:#ff7bc5;--blue:#75ddff}
+    *{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
+    main{width:min(820px,calc(100% - 28px));margin:24px auto 60px}.beta{display:inline-block;background:var(--ink);color:#fff;padding:6px 10px;transform:rotate(-1deg);font-weight:900}
+    h1{font-size:clamp(2.8rem,10vw,6.8rem);line-height:.82;letter-spacing:-.08em;margin:28px 0 18px;max-width:760px}h1 span{color:#e33d27}
+    .lede{font-size:clamp(1.05rem,3vw,1.35rem);max-width:650px}.box{border:3px solid var(--ink);box-shadow:7px 7px 0 var(--ink);padding:18px;margin:28px 7px 38px 0;background:#fff}
+    textarea{width:100%;min-height:110px;resize:vertical;border:2px solid var(--ink);padding:14px;font:inherit;background:#fff}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{border:2px solid var(--ink);background:var(--acid);color:var(--ink);padding:11px 15px;font:900 15px/1 ui-monospace,monospace;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}button:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}button.alt{background:var(--pink)}
+    .examples{font-size:.85rem;color:#555}.status{font-weight:900;animation:blink .8s steps(2) infinite}@keyframes blink{50%{opacity:.2}}
+    .answer{border:2px solid var(--ink);padding:15px;margin:12px 0;background:#fff}.answer:nth-child(odd){background:#effbff}.who{font-weight:900;font-size:.8rem;text-transform:uppercase}.react button{font-size:.72rem;padding:8px;background:#fff;box-shadow:none}
+    .hidden{display:none}.tiny{font-size:.76rem;color:#555}.footer{border-top:2px dashed var(--ink);padding-top:18px}.counter{float:right;background:var(--blue);border:2px solid var(--ink);padding:5px 8px;font-weight:900}
+  </style>
+</head>
+<body><main>
+  <div class="beta">BETA BETA BETA</div><div class="counter">ASKS: <span id="asks">2</span></div>
+  <h1>SILLY<br>PARENTING<br><span>SLOP</span></h1>
+  <p class="lede">Parenting advice from people who have actually had to put a screaming child into pants.</p>
+
+  <section class="box" id="askBox">
+    <h2>ASK OTHER PARENTS</h2>
+    <textarea id="question" placeholder="How the fuck do you leave the playground?"></textarea>
+    <p class="examples">TRY: “Is this a phase or have I ruined bedtime forever?” · “My kid only eats beige.”</p>
+    <div class="row"><button id="ask">ASK PARENTS</button><button class="alt" id="beParent">BE THE PARENT</button></div>
+  </section>
+
+  <section id="loading" class="box hidden"><p class="status">CONSULTING PARENTS…</p><p class="tiny">Nobody is synthesizing anything. Please lower your expectations.</p></section>
+  <section id="answers" class="hidden"><h2>SEVERAL ANSWERS, ZERO CONSENSUS</h2><div id="answerList"></div><button id="again">ASK SOMETHING ELSE</button></section>
+  <section id="respond" class="box hidden"><h2>BE THE PARENT</h2><p><strong>A stranger asks:</strong> “My four-year-old negotiates every single bedtime step. How do I stop the hostage situation?”</p><textarea id="reply" placeholder="Give them the weirdly specific thing that worked (or failed) for you."></textarea><div class="row"><button id="submitReply">SEND QUESTIONABLE WISDOM</button><button class="alt" id="cancel">NOPE</button></div></section>
+
+  <footer class="footer"><strong>NO EXPERTS. NO AI SUMMARY. NO BEST ANSWER.</strong><p class="tiny">A dumb experiment among friends. Things may disappear, break, contradict each other, or be incredibly bad advice. Do not put anything here you wouldn't tell the group chat.</p></footer>
+</main><script>
+let asks=2;const $=s=>document.querySelector(s);const sample=[
+ ['PARENT OF 2 · AGES 3 + 7','We announce “two more things” instead of minutes. Two slides, two pushes, then I physically leave while narrating like a nature documentary. Works 60% of the time.'],
+ ['PARENT OF 1 · AGE 4','Bring a snack that only exists in the car. Is this bribery? Yes. Do we leave the playground? Also yes.'],
+ ['PARENT OF 3 · AGES 2, 6 + 9','No idea. Mine also becomes feral. Last Tuesday I carried him out sideways while he yelled that I had ruined his business meeting.']
+];
+function show(id){['#askBox','#loading','#answers','#respond'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+$('#ask').onclick=()=>{if(!$('#question').value.trim()){$('#question').focus();return}if(asks<1){alert('You are out of asks. Be the parent and earn one.');return}asks--;$('#asks').textContent=asks;show('#loading');setTimeout(()=>{$('#answerList').innerHTML=sample.map(([w,t])=>`<article class="answer"><div class="who">${w}</div><p>${t}</p><div class="row react"><button>THIS HELPED</button><button>LOL SAME</button><button>ABSOLUTELY NOT</button></div></article>`).join('');show('#answers')},1150)};
+$('#beParent').onclick=()=>show('#respond');$('#cancel').onclick=()=>show('#askBox');$('#again').onclick=()=>show('#askBox');
+$('#submitReply').onclick=()=>{if(!$('#reply').value.trim()){$('#reply').focus();return}asks++;$('#asks').textContent=asks;$('#reply').value='';alert('Wisdom delivered. You earned another ask. Terrifying.');show('#askBox')};
+</script></body></html>
